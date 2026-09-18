@@ -209,6 +209,50 @@
     border:none;
   }
  
+  /* ── HIGHLIGHTED PROJECT ── */
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: stretch;
+    max-width: 1200px;
+  }
+  .highlight-text p {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin-bottom: 16px;
+    max-width: 560px;
+  }
+  .highlight-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(132,0,5,0.14) 60%, var(--surface2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 220px;
+    padding: 24px;
+    text-align: center;
+  }
+  .highlight-panel .hp-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.75;
+  }
+  .highlight-panel .hp-title {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--white);
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .hero-inner  { grid-template-columns: 1fr; gap:40px; }
@@ -216,6 +260,7 @@
     .stat-card   { flex:1; min-width:200px; }
     .about-grid  { grid-template-columns: 1fr; }
     .hero        { padding: 60px 20px; }
+    .highlight-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -281,9 +326,33 @@
   </div>
 </section>
  
-<!-- FEATURED VIDEO -->
+<!-- HIGHLIGHTED PROJECT -->
 <div class="section" style="padding-top:0;">
-  <p class="section-label">// latest work</p>
+  <p class="section-label">// highlighted project</p>
+  <h2 class="section-title">The Resonance</h2>
+  <div class="section-rule"></div>
+  <div class="highlight-grid">
+    <div class="highlight-text">
+      <p>My primary original IP — a solo-built elemental action RPG in Unreal Engine 5. GAS-driven combat, a C++ enemy AI controller, and a custom Gameplay Ability System plugin (GASOline) built from scratch to run it. This is the vertical slice I'm building toward a gameplay programmer role at an action-RPG studio.</p>
+      <div class="tags" style="margin-bottom:20px;">
+        <span class="tag">UE5</span>
+        <span class="tag">C++</span>
+        <span class="tag">GAS</span>
+        <span class="tag p">Original IP</span>
+        <span class="tag g">In Dev</span>
+      </div>
+      <a class="btn btn-solid" href="case-the-resonance.html">View Case Study →</a>
+    </div>
+    <div class="highlight-panel">
+      <span class="hp-eyebrow">// elemental action rpg</span>
+      <span class="hp-title">The Resonance</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED VIDEO -->
+<div class="section">
+  <p class="section-label">// also shipped</p>
   <h2 class="section-title">Pong in C++ — SDL3</h2>
   <div class="section-rule"></div>
   <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:28px;max-width:640px;">

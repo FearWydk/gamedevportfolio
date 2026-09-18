@@ -129,7 +129,7 @@
       <span class="cs-chip green">In Development</span>
     </div>
     <h1 class="cs-title">The Resonance</h1>
-    <p class="cs-subtitle">An elemental action RPG built solo in Unreal Engine 5 — my primary original IP and the vertical slice I'm building toward a gameplay programmer role at a Square Enix Western studio. Working names along the way: Yoruba Hearts, KHTry.</p>
+    <p class="cs-subtitle">An elemental action RPG built solo in Unreal Engine 5 — my primary original IP and the vertical slice I'm building toward a gameplay programmer role at an action-RPG studio.</p>
   </div>
 </div>
 
@@ -154,7 +154,7 @@
     <p class="cs-section-label">// 01</p>
     <h2 class="cs-section-title">Purpose</h2>
     <div class="cs-section-rule"></div>
-    <p class="cs-text">The Resonance is my primary long-term project and the one piece of original IP I'm building entirely on my own, outside of any studio work. It's the deliverable I'm treating as my vertical slice — the project meant to carry the most weight when I go after a junior/associate gameplay programmer role at a Square Enix Western studio.</p>
+    <p class="cs-text">The Resonance is my primary long-term project and the one piece of original IP I'm building entirely on my own, outside of any studio work. It's the deliverable I'm treating as my vertical slice — the project meant to carry the most weight when I go after a gameplay programmer role at an action-RPG studio.</p>
     <p class="cs-text">The combat identity blends Kingdom Hearts II's combo finishers with Final Fantasy XV's multi-weapon switching (Sword / Gun / Lance), layered under a custom elemental system rooted in West and Central African (Yoruba) cosmology. The player belongs to an organization called The Resonance and carries the title Cipher — someone with the rare, hidden ability to hold every elemental affinity at once, in the same spirit as Clive and the Eikons in Final Fantasy XVI. Some Ciphers have defected to the enemy faction, The Severance; its corrupted-element enemies (Light Wrath, Dark Wrath) are the game's first combat targets.</p>
     <p class="cs-text">Underneath the game, everything runs on Unreal's Gameplay Ability System — not off-the-shelf GAS boilerplate, but through a plugin I built from scratch called <a href="case-gasoline-plugin.html" style="color:var(--cyan);">GASOline</a>. Blueprint carries game-side logic; C++ owns the plugin layer, enemy AI, and the parts of combat that need to hold up as real architecture rather than one-off nodes.</p>
   </div>
@@ -164,7 +164,7 @@
     <p class="cs-section-label">// 02</p>
     <h2 class="cs-section-title">Implementation</h2>
     <div class="cs-section-rule"></div>
-    <p class="cs-text">Six systems make up the current vertical slice — combat feel, GAS-driven health and damage, C++ enemy AI, UI, menu flow, and the elemental design layer underneath all of it.</p>
+    <p class="cs-text">Five systems make up the current vertical slice — combat feel, GAS-driven health and damage, C++ enemy AI, UI, and menu flow.</p>
     <ul class="cs-impl-list">
 
       <li>
@@ -217,16 +217,6 @@
         </div>
       </li>
 
-      <li>
-        <div class="impl-main">
-          <span class="impl-icon">06 — Zodia Elements System</span>
-          <div class="impl-text">
-            <strong>12-Sign Elemental Affinity, FFT-Style Compatibility</strong>
-            A dual-element zodiac system where a player's birth sign sets their elemental affinity — compatible elements hit harder, in the spirit of Final Fantasy Tactics' zodiac compatibility, without locking out the rest of the kit. The damage model stacks two axes — sign matchup and element-vs-target — modeled after Digimon Time Stranger's Vaccine/Virus/Data typing.
-          </div>
-        </div>
-      </li>
-
     </ul>
   </div>
 
@@ -239,7 +229,7 @@
     <div class="cs-impact-grid">
       <div class="impact-card"><p class="impact-num">A1–A3</p><p class="impact-label">Enemy AI Milestones Complete</p></div>
       <div class="impact-card"><p class="impact-num">GAS</p><p class="impact-label">Full Combat &amp; Health Architecture</p></div>
-      <div class="impact-card"><p class="impact-num">12</p><p class="impact-label">Zodiac Elemental Signs Designed</p></div>
+      <div class="impact-card"><p class="impact-num">3</p><p class="impact-label">Attack Variants Per Enemy</p></div>
       <div class="impact-card"><p class="impact-num">C++</p><p class="impact-label">Custom Enemy AI Controller</p></div>
     </div>
   </div>
@@ -266,7 +256,6 @@
     <div class="cs-takeaway">
       <p>Building The Resonance means owning the game and the tooling underneath it at the same time. GASOline exists because I wanted the combat architecture to be something I designed on purpose, not something that fell out of trial and error inside one project — which forces a different discipline than working inside someone else's systems: attribute sets, ability sets, and the AI controller all have to hold up as reusable, documented pieces, not just code that happens to work for one enemy or one combo string.</p>
       <p>The AI work in particular pushed me further into C++ than any Blueprint-only project has. Writing the perception-to-blackboard pipeline, the BT decorator, and the per-variant attack task in C++ meant thinking in terms of engine-level contracts — behavior tree components, blackboard keys, perception configs — instead of node graphs. That's the direction I want to keep pushing, since it's closer to the day-to-day of the gameplay programmer roles I'm targeting.</p>
-      <p>The zodiac and Yoruba-rooted worldbuilding aren't just flavor — they're why the elemental system has real design constraints (twelve signs, corrected element houses, compatibility rules) instead of an arbitrary rock-paper-scissors wrapper. Getting the Final Fantasy Tactics-style compatibility math right, and stacking it against a second Digimon-style typing axis, has been its own systems design problem worth solving carefully before it goes into code.</p>
     </div>
   </div>
 
