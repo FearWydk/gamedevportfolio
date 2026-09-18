@@ -146,3 +146,33 @@ function initScroller(trackId, dotsId, prevId, nextId, projects) {
     track.scrollLeft = scrollLeft-(e.pageX-track.offsetLeft-startX);
   });
 }
+
+/* ── VIEW ALL TOGGLE (inline-expand dense grid below the scroller) ── */
+function initViewAllToggle(btnId, gridViewId, gridId, projects) {
+  const btn      = document.getElementById(btnId);
+  const gridView = document.getElementById(gridViewId);
+  const grid     = document.getElementById(gridId);
+  if (!btn || !gridView || !grid) return;
+
+  btn.addEventListener('click', () => {
+    const opening = !gridView.classList.contains('open');
+
+    if (opening && !grid.dataset.built) {
+      projects.forEach(p => {
+        const scene = buildCard(p);
+        grid.appendChild(scene);
+        initTilt(scene.querySelector('.card'));
+      });
+      grid.dataset.built = 'true';
+    }
+
+    gridView.classList.toggle('open', opening);
+    btn.classList.toggle('active', opening);
+    btn.setAttribute('aria-expanded', String(opening));
+    btn.querySelector('.vab-label').textContent = opening ? 'Show Less' : 'View All Projects';
+
+    if (opening) {
+      requestAnimationFrame(() => gridView.scrollIntoView({ behavior:'smooth', block:'start' }));
+    }
+  });
+}

@@ -45,8 +45,16 @@
     <div class="s-dots" id="perDots"></div>
     <button class="s-btn" id="perNext">&#8594;</button>
   </div>
+  <div class="view-all-wrap">
+    <button class="btn view-all-btn" id="perViewAllBtn" aria-expanded="false" aria-controls="perGridView">
+      <span class="vab-label">View All Projects</span> <span class="vab-icon">↓</span>
+    </button>
+  </div>
+  <div class="grid-view" id="perGridView">
+    <div class="card-grid" id="perGrid"></div>
+  </div>
 </div>
- 
+
 <footer class="site-footer">
   <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
   <div class="footer-links">
@@ -68,7 +76,7 @@ const PER_PROJECTS = [
     year:       "Ongoing",
     badge:      "Original IP",
     badgeClass: "personal",
-    desc:       "Elemental action RPG built solo — GAS-driven combat, C++ enemy AI, and a 12-sign zodiac elemental system. My vertical slice toward a gameplay programmer role at a Square Enix Western studio.",
+    desc:       "Elemental action RPG built solo — GAS-driven combat, C++ enemy AI, and a data-driven combat framework. My vertical slice toward a gameplay programmer role at an action-RPG studio.",
     ctaLabel:   "View Case Study",
     ctaLink:    "case-the-resonance.html",
     tags: [
@@ -79,6 +87,23 @@ const PER_PROJECTS = [
       { label:"In Dev",     color:"g" },
     ],
     media:{ type:"placeholder", html: "<div style=\"width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:0 16px;\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#22d3ee;opacity:0.7;\">// elemental action rpg</span><span style=\"font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;color:#fff;\">The Resonance</span></div>" }
+  },
+
+  {
+    title:      "Automation Grid",
+    year:       "2026",
+    badge:      "Personal",
+    badgeClass: "personal",
+    desc:       "A deterministic cellular-automaton puzzle in Blueprint — place a seed, then scrub forward and backward through its entire simulated future before committing to it. Fully precomputable simulation, GPU-side instanced rendering.",
+    ctaLabel:   "View Case Study",
+    ctaLink:    "case-automation-grid.html",
+    tags: [
+      { label:"UE5",              color:"" },
+      { label:"Blueprints",       color:"" },
+      { label:"Systems Design",   color:"p" },
+      { label:"Prototype",        color:"g" },
+    ],
+    media:{ type:"image", src:"media/automation-grid/hero.jpg", alt:"Automation Grid — cellular automaton mid-simulation" }
   },
 
   {
@@ -157,6 +182,7 @@ const PER_PROJECTS = [
  
 document.addEventListener('DOMContentLoaded', () => {
   initScroller('perTrack', 'perDots', 'perPrev', 'perNext', PER_PROJECTS);
+  initViewAllToggle('perViewAllBtn', 'perGridView', 'perGrid', PER_PROJECTS);
   document.getElementById('hamburger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });

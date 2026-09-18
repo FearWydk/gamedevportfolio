@@ -434,6 +434,35 @@ img { display: block; max-width: 100%; }
 }
 .s-dot.active { background:var(--cyan); transform:scale(1.5); }
 
+/* ── VIEW ALL TOGGLE + DENSE GRID ── */
+.view-all-wrap { display:flex; justify-content:center; padding:0 40px 8px; }
+.view-all-btn { position:relative; }
+.view-all-btn .vab-icon { display:inline-block; transition:transform 0.25s ease; }
+.view-all-btn.active .vab-icon { transform:rotate(180deg); }
+
+.grid-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease, padding 0.4s ease;
+}
+.grid-view.open {
+  max-height: 6000px;
+  opacity: 1;
+  padding: 8px 40px 48px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.card-grid .card-scene { height:auto; flex:none; width:auto; }
+.card-grid .card { height:auto; min-height:420px; }
+
 /* ── MOBILE SCROLLER ── */
 @media (pointer: coarse) and (max-width: 600px) {
   :root { --card-w:calc(100vw - 32px); --card-h:auto; --media-h:200px; }
@@ -443,6 +472,8 @@ img { display: block; max-width: 100%; }
   .card { height:auto; transform:none !important; }
   .holo { display:none; }
   .scroller-nav { display:none; }
+  /* the vertically-stacked scroller already shows every card on mobile */
+  .view-all-wrap { display:none; }
 }
 
 @media (max-width: 768px) {

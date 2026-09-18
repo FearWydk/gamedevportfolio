@@ -45,6 +45,14 @@
     <div class="s-dots" id="proDots"></div>
     <button class="s-btn" id="proNext">&#8594;</button>
   </div>
+  <div class="view-all-wrap">
+    <button class="btn view-all-btn" id="proViewAllBtn" aria-expanded="false" aria-controls="proGridView">
+      <span class="vab-label">View All Projects</span> <span class="vab-icon">↓</span>
+    </button>
+  </div>
+  <div class="grid-view" id="proGridView">
+    <div class="card-grid" id="proGrid"></div>
+  </div>
 </div>
 
 <footer class="site-footer">
@@ -106,6 +114,7 @@ const PRO_PROJECTS = [
 
 document.addEventListener('DOMContentLoaded', () => {
   initScroller('proTrack', 'proDots', 'proPrev', 'proNext', PRO_PROJECTS);
+  initViewAllToggle('proViewAllBtn', 'proGridView', 'proGrid', PRO_PROJECTS);
   document.getElementById('hamburger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });

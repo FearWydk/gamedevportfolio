@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Automation Grid — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  .cs-hero { position:relative; min-height:460px; display:flex; align-items:flex-end; overflow:hidden; }
+  .cs-hero-bg { position:absolute; inset:0; background-size:cover; background-position:center top; filter:brightness(0.35) saturate(0.9); transform:scale(1.04); transition:transform 8s ease; }
+  .cs-hero:hover .cs-hero-bg { transform:scale(1.0); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.6) 60%,var(--bg-dark) 100%); }
+  .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
+
+  .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
+  .cs-back:hover { color:var(--cyan); }
+  .cs-badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cs-chip { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.08); }
+  .cs-chip.red    { color:#E32132; border-color:rgba(227,33,50,0.4);   background:rgba(132,0,5,0.15); }
+  .cs-chip.purple { color:#a78bfa; border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.08); }
+  .cs-chip.green  { color:#4ade80; border-color:rgba(74,222,128,0.3);  background:rgba(74,222,128,0.08); }
+  .cs-title { font-family:var(--font-head); font-weight:700; font-size:clamp(32px,5vw,58px); color:var(--white); line-height:1.05; margin-bottom:12px; }
+  .cs-subtitle { font-size:15px; font-weight:300; color:rgba(255,255,255,0.6); max-width:640px; line-height:1.6; }
+
+  .cs-meta { background:var(--surface); border-bottom:1px solid var(--border); }
+  .cs-meta-inner { max-width:1200px; margin:0 auto; padding:0 40px; display:flex; gap:48px; flex-wrap:wrap; }
+  .cs-meta-item { padding:18px 0; flex-shrink:0; }
+  .cs-meta-label { font-family:var(--font-mono); font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .cs-meta-value { font-family:var(--font-mono); font-size:12px; color:var(--white); }
+  .cs-meta-value a { color:var(--cyan); text-decoration:none; transition:opacity 0.2s; }
+  .cs-meta-value a:hover { opacity:0.7; }
+
+  .cs-body { max-width:1200px; margin:0 auto; padding:64px 40px; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; }
+
+  .cs-section { margin-bottom:64px; }
+  .cs-section:last-child { margin-bottom:0; }
+  .cs-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#E32132; margin-bottom:10px; opacity:0.9; }
+  .cs-section-title { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--white); margin-bottom:20px; line-height:1.2; }
+  .cs-section-rule { width:32px; height:2px; background:linear-gradient(90deg,#E32132,transparent); margin-bottom:24px; }
+  .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
+  .cs-text:last-child { margin-bottom:0; }
+
+  /* INVARIANT QUOTE */
+  .cs-quote { font-family:var(--font-mono); font-size:12.5px; color:var(--cyan); background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); padding:16px 18px; line-height:1.75; margin:20px 0; }
+
+  /* IMPL CARDS (with optional static-image evidence column) */
+  .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+  .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
+  .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .impl-main { padding:16px 18px; flex:1; min-width:0; }
+  .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
+  .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+  .impl-text code { font-family:var(--font-mono); font-size:12px; color:var(--cyan); }
+
+  .impl-media { width:140px; flex-shrink:0; border-left:1px solid var(--border); overflow:hidden; position:relative; cursor:pointer; min-height:100px; }
+  .impl-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s,filter 0.3s; filter:brightness(0.65); display:block; }
+  .impl-media:hover img { transform:scale(1.06); filter:brightness(1); }
+  .impl-media-label { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan); padding:5px 8px; text-align:center; }
+
+  /* IMPACT */
+  .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
+  .impact-card:hover { border-color:rgba(34,211,238,0.4); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .impact-num { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--cyan); line-height:1; margin-bottom:6px; }
+  .impact-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); line-height:1.4; }
+
+  /* GALLERY */
+  .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .gallery-item { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface2); position:relative; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+  .gallery-item:hover { border-color:rgba(34,211,238,0.4); transform:translateY(-2px); }
+  .gallery-item.wide { grid-column:span 2; }
+  .gallery-item img { width:100%; display:block; object-fit:cover; min-height:120px; max-height:280px; }
+  .gallery-caption { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.85)); padding:24px 12px 10px; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; color:var(--offwhite); opacity:0; transition:opacity 0.2s; }
+  .gallery-item:hover .gallery-caption { opacity:1; }
+  .gallery-section-label { grid-column:span 2; font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-top:8px; border-top:1px solid var(--border); margin-top:4px; }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:999; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:85vh; border-radius:var(--radius-sm); object-fit:contain; }
+  .lightbox-close { position:absolute; top:20px; right:24px; font-family:var(--font-mono); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; background:none; border:none; transition:color 0.2s; }
+  .lightbox-close:hover { color:var(--white); }
+
+  /* TAKEAWAY */
+  .cs-takeaway { background:var(--surface); border:1px solid var(--border); border-left:4px solid #E32132; border-radius:var(--radius); padding:28px 28px 28px 24px; margin-top:8px; }
+  .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
+  .cs-takeaway p:last-child { margin-bottom:0; }
+  .cs-takeaway blockquote { font-family:var(--font-mono); font-size:13px; color:var(--cyan); border-left:2px solid var(--cyan); padding-left:14px; margin:0 0 14px; line-height:1.7; }
+
+  /* SIDEBAR */
+  .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
+  .sidebar-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .sidebar-block-title { font-family:var(--font-mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--cyan); opacity:0.7; margin-bottom:14px; }
+  .tech-tag { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.06); margin:0 4px 6px 0; }
+  .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); color:var(--white); text-decoration:none; font-size:12px; font-weight:600; letter-spacing:1px; transition:background 0.2s,border-color 0.2s; margin-bottom:8px; }
+  .sidebar-link:last-child { margin-bottom:0; }
+  .sidebar-link:hover { background:rgba(34,211,238,0.08); border-color:rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon { font-size:14px; color:var(--cyan); }
+
+  /* PAGINATION */
+  .cs-pagination { max-width:1200px; margin:0 auto; padding:32px 40px 64px; display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid var(--border); }
+  .cs-pag-btn { display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .cs-pag-btn:hover { color:var(--cyan); }
+  .cs-pag-btn .pag-title { font-family:var(--font-head); font-size:13px; font-weight:600; color:var(--white); letter-spacing:0; text-transform:none; display:block; margin-top:3px; }
+
+  @media (max-width:900px) {
+    .cs-body { grid-template-columns:1fr; gap:40px; padding:40px 20px; }
+    .cs-sidebar { position:static; }
+    .cs-hero-content { padding:32px 20px; }
+    .cs-meta-inner { padding:0 20px; gap:24px; }
+    .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
+    .cs-pagination { padding:24px 20px 48px; }
+    .gallery-grid { grid-template-columns:1fr; }
+    .gallery-item.wide,.gallery-section-label { grid-column:span 1; }
+    .impl-media { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html">Professional</a></li>
+    <li><a href="personal.html" class="active">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-bg" style="background-image:url('media/automation-grid/hero.jpg');"></div>
+  <div class="cs-hero-content">
+    <a class="cs-back" href="personal.html">← Back to Personal Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Personal</span>
+      <span class="cs-chip purple">Systems Design</span>
+      <span class="cs-chip">Blueprints</span>
+      <span class="cs-chip green">Prototype</span>
+    </div>
+    <h1 class="cs-title">Automation Grid</h1>
+    <p class="cs-subtitle">A deterministic cellular automaton whose determinism is exposed to the player as a scrubbable timeline — place a seed, then scrub forward and backward through every generation it will produce before committing to it.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item"><p class="cs-meta-label">Timeline</p><p class="cs-meta-value">2026 — Ongoing</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Role</p><p class="cs-meta-value">Solo Developer</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Type</p><p class="cs-meta-value">Puzzle Prototype</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Engine</p><p class="cs-meta-value">Unreal Engine 5 (Blueprints)</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Category</p><p class="cs-meta-value">Cellular Automaton</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Status</p><p class="cs-meta-value">Prototype</p></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+<main>
+
+  <!-- PURPOSE -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 01</p>
+    <h2 class="cs-section-title">Purpose</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Automation Grid is a Conway's-Game-of-Life-style puzzle: the player places a limited number of live cells on a 12×12 board, and those cells evolve on their own from there. The puzzle only works if the player can see what a seed will do before committing to it — that meant the simulation had to be pure and fully precomputable, so the design constraint and the architecture constraint turned out to be the same constraint. The scrub bar that lets a player step back and forth through a seed's entire future isn't a UI feature bolted onto the automaton — it's only possible because the simulation is cheap and deterministic enough to run in full on every single input.</p>
+    <p class="cs-text">Everything below traces back to one rule I wrote down early and kept enforcing whenever something broke:</p>
+    <p class="cs-quote">Seed is authored. History is derived. Current is a window into History. Anything that mutates the seed triggers a full re-simulation. Nothing else writes the board.</p>
+    <p class="cs-text">Nearly every bug in this project traced back to a violation of that rule — a function writing <code>Current</code> directly, or derived marker state accumulating instead of rebuilding. Finding the invariant that made the system tractable, and learning to recognize bugs as breaches of it, was the actual engineering work here.</p>
+  </div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 02</p>
+    <h2 class="cs-section-title">Implementation</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Built entirely in Blueprint, chosen to iterate on the puzzle design quickly. The decisions below are structural — they'd hold in any language.</p>
+    <ul class="cs-impl-list">
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">01 — PopulationAt</span>
+          <div class="impl-text">
+            <strong>Grid Population Helper</strong>
+            A small pure function that counts live cells for a given generation by looping the flat cell array and running <code>CellCount</code> against it. Used anywhere the simulation needs to know how full a generation is without touching rendering or history state.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/PopulationAt.png','PopulationAt — grid population helper function')">
+          <img src="media/automation-grid/PopulationAt.png" alt="PopulationAt Blueprint function"/>
+          <span class="impl-media-label">PopulationAt()</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">02 — InitGrid &amp; ResetToSeed</span>
+          <div class="impl-text">
+            <strong>Board Setup on Begin Play</strong>
+            <code>Event BeginPlay</code> calls <code>Init Grid</code> to allocate the flat cell array and Instanced Static Mesh, then <code>Reset to Seed</code> to load the authored starting pattern. Splitting allocation from seeding keeps "build the board" and "populate the board" as two testable steps instead of one.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/InitGrid ResetToSeed.png','Event BeginPlay — Init Grid then Reset to Seed')">
+          <img src="media/automation-grid/InitGrid ResetToSeed.png" alt="InitGrid and ResetToSeed on BeginPlay"/>
+          <span class="impl-media-label">BeginPlay</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">03 — AdvanceStep, Double-Buffered</span>
+          <div class="impl-text">
+            <strong>Step Reads Current, Writes Next</strong>
+            <code>Step</code> reads the <code>Current</code> buffer and writes results into a separate <code>Next</code> buffer, swapping only once every cell has been evaluated. Reading and writing the same buffer would make the result depend on iteration order — a glider would smear instead of translate. One extra buffer is the correctness requirement for the whole simulation, then <code>AdvanceStep</code> chains into re-rendering and a target check.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/AdvanceStep Chain.png','AdvanceStep — Step, re-render, Check Targets')">
+          <img src="media/automation-grid/AdvanceStep Chain.png" alt="AdvanceStep chain calling Step, Render Current, Check Targets"/>
+          <span class="impl-media-label">AdvanceStep</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">04 — CheckTargets</span>
+          <div class="impl-text">
+            <strong>Win Detection &amp; Timer Teardown</strong>
+            Loops the target indices, checks each against the live cell set, and once every target is reached and the simulation isn't already solved, clears and invalidates the step timer by handle and plays the win Timeline. The solved/running guard (<code>NOT Is Solved AND Is Running</code>) exists so the win state fires exactly once, not once per remaining generation.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/CheckTargets.png','CheckTargets — full win-detection and timer teardown loop')">
+          <img src="media/automation-grid/CheckTargets.png" alt="CheckTargets Blueprint graph"/>
+          <span class="impl-media-label">CheckTargets()</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">05 — ShowGeneration</span>
+          <div class="impl-text">
+            <strong>Rebuild Derived State, Never Accumulate It</strong>
+            Scrubbing to a generation clears every marker and recomputes <code>Reached Targets</code> from generation 0 up to the displayed generation, then re-renders. Accumulating markers instead would be cheaper and work perfectly right up until the player scrubs backward, at which point markers stay lit for events that haven't happened yet at that point in time. The full rebuild is trivial at this board size and correct in both directions.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/ShowGeneration.png','ShowGeneration — clears markers and rebuilds them up to the scrubbed generation')">
+          <img src="media/automation-grid/ShowGeneration.png" alt="ShowGeneration Blueprint graph"/>
+          <span class="impl-media-label">ShowGeneration()</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">06 — AppendCurrentToHistory</span>
+          <div class="impl-text">
+            <strong>Flat History Buffer</strong>
+            Blueprint can't nest containers, so the timeline is one flat array indexed by <code>History[gen * CellCount + i]</code> rather than an array-of-arrays — a constraint that pushed toward the layout I'd choose anyway. Every generation the simulation computes gets appended here once, which is what makes scrubbing a read against existing data instead of a re-simulation.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/AppendCurrentToHistory.png','AppendCurrentToHistory — flat-array history buffer append')">
+          <img src="media/automation-grid/AppendCurrentToHistory.png" alt="AppendCurrentToHistory Blueprint graph"/>
+          <span class="impl-media-label">AppendToHistory</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">07 — ToggleSeed</span>
+          <div class="impl-text">
+            <strong>Budgeted Seed Authoring</strong>
+            Clicking a cell while editing toggles it in the <code>Seed</code> array against a <code>Seed Budget</code>, tracking how many placements are <code>Used</code> so the player can't overspend. Any successful toggle writes the seed and triggers <code>Precompute</code> — a full re-simulation from generation 0 — because per the invariant, nothing downstream of the seed is allowed to be patched instead of rebuilt.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/automation-grid/ToggleSeed.png','ToggleSeed — budgeted cell toggling that triggers a full Precompute')">
+          <img src="media/automation-grid/ToggleSeed.png" alt="ToggleSeed Blueprint graph"/>
+          <span class="impl-media-label">ToggleSeed()</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">08 — GPU-Side Rendering</span>
+          <div class="impl-text">
+            <strong>One Instanced Static Mesh, One Draw Call</strong>
+            All 144 tiles are a single Instanced Static Mesh; per-instance custom data carries state and the material does the interpretation. Slot 0 carries alive/dead, written every render. Slot 2 carries marker type. Slot 3 carries each tile's normalized distance from center, written once at init — it's what drives the radial win-sweep and ripple effects, so the CPU never recomputes a per-tile distance and the whole effect is two scalar parameters animating against geometry the material already knows.
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 03</p>
+    <h2 class="cs-section-title">Impact</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">A full <code>Precompute</code> is 40 generations × 144 cells × 9 neighbor reads — roughly 52,000 operations per seed placement, comfortably inside a frame in the Blueprint VM. That number is the justification for the whole design: because a full re-simulation is cheap at this board size, the project never needed incremental updates, cached partials, or dirty-region tracking. Every click just reruns everything.</p>
+    <div class="cs-impact-grid">
+      <div class="impact-card"><p class="impact-num">144</p><p class="impact-label">Cells — 12×12 Grid</p></div>
+      <div class="impact-card"><p class="impact-num">40</p><p class="impact-label">Generations Precomputed / Seed</p></div>
+      <div class="impact-card"><p class="impact-num">~52K</p><p class="impact-label">Ops per Seed Placement</p></div>
+      <div class="impact-card"><p class="impact-num">1</p><p class="impact-label">Draw Call, Full Board</p></div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 04</p>
+    <h2 class="cs-section-title">Media Gallery</h2>
+    <div class="cs-section-rule"></div>
+    <div class="gallery-grid">
+
+      <p class="gallery-section-label">Gameplay</p>
+
+      <div class="gallery-item wide" onclick="openLightbox('media/automation-grid/hero.jpg','Automation Grid — a spreading generation mid-simulation')">
+        <img src="media/automation-grid/hero.jpg" alt="Automation Grid mid-simulation"/>
+        <span class="gallery-caption">A generation mid-spread across the board</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('media/automation-grid/seed-editor.jpg','Seed editor — an authored diamond seed before simulation starts')">
+        <img src="media/automation-grid/seed-editor.jpg" alt="Seed editor with authored diamond pattern"/>
+        <span class="gallery-caption">Authored seed, pre-simulation</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('media/automation-grid/mid-generation.jpg','A few generations in — the seed pattern evolving')">
+        <img src="media/automation-grid/mid-generation.jpg" alt="A few generations into the simulation"/>
+        <span class="gallery-caption">A few generations later</span>
+      </div>
+
+      <p class="gallery-section-label">Blueprint Reference</p>
+
+      <div class="gallery-item wide" onclick="openLightbox('media/automation-grid/CheckTargets.png','CheckTargets — full win-detection and timer teardown loop')">
+        <img src="media/automation-grid/CheckTargets.png" alt="CheckTargets Blueprint graph, full view"/>
+        <span class="gallery-caption">CheckTargets() — full graph</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('media/automation-grid/ShowGeneration.png','ShowGeneration — clears and rebuilds markers up to the scrubbed generation')">
+        <img src="media/automation-grid/ShowGeneration.png" alt="ShowGeneration Blueprint graph, full view"/>
+        <span class="gallery-caption">ShowGeneration() — full graph</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('media/automation-grid/ToggleSeed.png','ToggleSeed — budgeted cell toggling that triggers a full Precompute')">
+        <img src="media/automation-grid/ToggleSeed.png" alt="ToggleSeed Blueprint graph, full view"/>
+        <span class="gallery-caption">ToggleSeed() — full graph</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 05</p>
+    <h2 class="cs-section-title">Takeaway</h2>
+    <div class="cs-section-rule"></div>
+    <div class="cs-takeaway">
+      <p>The trap in explaining this project is starting with Conway's Game of Life — everyone already knows Conway's Game of Life. The better way in is the problem it's actually solving:</p>
+      <blockquote>The puzzle only works if the player can see what a seed will do before committing to it. That meant the simulation had to be pure and fully precomputable — so the design constraint and the architecture constraint turned out to be the same constraint.</blockquote>
+      <p>From there, the custom-data rendering, the flat history buffer, and the derived-state rebuild in ShowGeneration all hold up to follow-up questions, because I've debugged every one of them deeply enough to go three levels down. Almost every bug I hit came from breaking the same rule in a new way — something writing the board directly instead of going through the seed, or something accumulating state that should have been rebuilt.</p>
+      <p>This is a Blueprint implementation, and I chose Blueprint specifically to iterate on the puzzle design quickly. That's a legitimate answer on its own — the interesting decisions here are structural ones about state and data flow, and they'd be exactly the same decisions in any language.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="cs-sidebar">
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Tech Stack</p>
+    <span class="tech-tag">Unreal Engine 5</span>
+    <span class="tech-tag">Blueprints</span>
+    <span class="tech-tag">Cellular Automaton</span>
+    <span class="tech-tag">Instanced Static Mesh</span>
+    <span class="tech-tag">Per-Instance Custom Data</span>
+    <span class="tech-tag">Flat Array Indexing</span>
+    <span class="tech-tag">Timelines</span>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">The Invariant</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Seed is authored. History is derived. Current is a window into History. Anything that mutates the seed triggers a full re-simulation.</p>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Role</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Solo developer — puzzle design, simulation architecture, and all Blueprint implementation.</p>
+  </div>
+</aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="case-gasoline-plugin.html">
+    ← <div><span>Previous</span><span class="pag-title">GASOline</span></div>
+  </a>
+  <a class="cs-pag-btn" href="personal.html">
+    <div style="text-align:right;"><span>Back to</span><span class="pag-title">Personal Projects</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  function openLightbox(src, alt) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxImg').alt = alt || '';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+</body>
+</html>
