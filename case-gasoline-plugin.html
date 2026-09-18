@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GASOline Plugin — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  .cs-hero { position:relative; min-height:380px; display:flex; align-items:flex-end; overflow:hidden; background:
+      radial-gradient(ellipse 70% 60% at 80% 10%, rgba(34,211,238,0.16), transparent),
+      radial-gradient(ellipse 50% 50% at 10% 95%, rgba(132,0,5,0.18), transparent),
+      var(--bg-darker); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.5) 70%,var(--bg-dark) 100%); }
+  .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
+
+  .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
+  .cs-back:hover { color:var(--cyan); }
+  .cs-badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cs-chip { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.08); }
+  .cs-chip.red    { color:#E32132; border-color:rgba(227,33,50,0.4);   background:rgba(132,0,5,0.15); }
+  .cs-chip.purple { color:#a78bfa; border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.08); }
+  .cs-chip.green  { color:#4ade80; border-color:rgba(74,222,128,0.3);  background:rgba(74,222,128,0.08); }
+  .cs-title { font-family:var(--font-head); font-weight:700; font-size:clamp(32px,5vw,58px); color:var(--white); line-height:1.05; margin-bottom:12px; }
+  .cs-subtitle { font-size:15px; font-weight:300; color:rgba(255,255,255,0.6); max-width:640px; line-height:1.6; }
+
+  .cs-meta { background:var(--surface); border-bottom:1px solid var(--border); }
+  .cs-meta-inner { max-width:1200px; margin:0 auto; padding:0 40px; display:flex; gap:48px; flex-wrap:wrap; }
+  .cs-meta-item { padding:18px 0; flex-shrink:0; }
+  .cs-meta-label { font-family:var(--font-mono); font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .cs-meta-value { font-family:var(--font-mono); font-size:12px; color:var(--white); }
+  .cs-meta-value a { color:var(--cyan); text-decoration:none; transition:opacity 0.2s; }
+  .cs-meta-value a:hover { opacity:0.7; }
+
+  .cs-body { max-width:1200px; margin:0 auto; padding:64px 40px; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; }
+
+  .cs-section { margin-bottom:64px; }
+  .cs-section:last-child { margin-bottom:0; }
+  .cs-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#E32132; margin-bottom:10px; opacity:0.9; }
+  .cs-section-title { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--white); margin-bottom:20px; line-height:1.2; }
+  .cs-section-rule { width:32px; height:2px; background:linear-gradient(90deg,#E32132,transparent); margin-bottom:24px; }
+  .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
+  .cs-text:last-child { margin-bottom:0; }
+
+  /* IMPL CARDS (text-only — no video column) */
+  .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+  .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
+  .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .impl-main { padding:16px 18px; flex:1; min-width:0; }
+  .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
+  .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+  .impl-text code { font-family:var(--font-mono); font-size:12px; color:var(--cyan); }
+
+  /* IMPACT */
+  .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
+  .impact-card:hover { border-color:rgba(34,211,238,0.4); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .impact-num { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--cyan); line-height:1; margin-bottom:6px; }
+  .impact-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); line-height:1.4; }
+
+  /* TAKEAWAY */
+  .cs-takeaway { background:var(--surface); border:1px solid var(--border); border-left:4px solid #E32132; border-radius:var(--radius); padding:28px 28px 28px 24px; margin-top:8px; }
+  .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
+  .cs-takeaway p:last-child { margin-bottom:0; }
+
+  /* MEDIA PLACEHOLDER */
+  .media-pending-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .media-pending { border-radius:var(--radius-sm); border:1px dashed var(--border); background:var(--surface2); min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px; text-align:center; }
+  .media-pending .mp-icon { font-size:20px; color:var(--muted); opacity:0.6; }
+  .media-pending .mp-label { font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+
+  /* SIDEBAR */
+  .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
+  .sidebar-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .sidebar-block-title { font-family:var(--font-mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--cyan); opacity:0.7; margin-bottom:14px; }
+  .tech-tag { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.06); margin:0 4px 6px 0; }
+  .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); color:var(--white); text-decoration:none; font-size:12px; font-weight:600; letter-spacing:1px; transition:background 0.2s,border-color 0.2s; margin-bottom:8px; }
+  .sidebar-link:last-child { margin-bottom:0; }
+  .sidebar-link:hover { background:rgba(34,211,238,0.08); border-color:rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon { font-size:14px; color:var(--cyan); }
+
+  /* PAGINATION */
+  .cs-pagination { max-width:1200px; margin:0 auto; padding:32px 40px 64px; display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid var(--border); }
+  .cs-pag-btn { display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .cs-pag-btn:hover { color:var(--cyan); }
+  .cs-pag-btn .pag-title { font-family:var(--font-head); font-size:13px; font-weight:600; color:var(--white); letter-spacing:0; text-transform:none; display:block; margin-top:3px; }
+
+  @media (max-width:900px) {
+    .cs-body { grid-template-columns:1fr; gap:40px; padding:40px 20px; }
+    .cs-sidebar { position:static; }
+    .cs-hero-content { padding:32px 20px; }
+    .cs-meta-inner { padding:0 20px; gap:24px; }
+    .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
+    .cs-pagination { padding:24px 20px 48px; }
+    .media-pending-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html">Professional</a></li>
+    <li><a href="personal.html" class="active">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-content">
+    <a class="cs-back" href="personal.html">← Back to Personal Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Personal</span>
+      <span class="cs-chip purple">Engine / Tools Programming</span>
+      <span class="cs-chip">C++</span>
+      <span class="cs-chip green">Active</span>
+    </div>
+    <h1 class="cs-title">GASOline</h1>
+    <p class="cs-subtitle">A reusable Gameplay Ability System framework built from scratch in C++ — the plugin layer that <a href="case-the-resonance.html" style="color:var(--cyan);">The Resonance</a> runs on, instead of hand-rolled GAS boilerplate.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item"><p class="cs-meta-label">Timeline</p><p class="cs-meta-value">Ongoing</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Role</p><p class="cs-meta-value">Sole Engineer</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Type</p><p class="cs-meta-value">Reusable UE5 Plugin</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Engine</p><p class="cs-meta-value">Unreal Engine 5.7+</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Category</p><p class="cs-meta-value">GAS Framework</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Status</p><p class="cs-meta-value">In Active Use</p></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+<main>
+
+  <!-- PURPOSE -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 01</p>
+    <h2 class="cs-section-title">Purpose</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">GASOline is a C++ plugin I built from scratch in Unreal Engine 5.7 to give my RPG, The Resonance, a clean, reusable foundation on top of Unreal's Gameplay Ability System — instead of wiring an Ability System Component, attribute sets, and ability-granting logic by hand inside one game's codebase.</p>
+    <p class="cs-text">The goal was a plugin-level abstraction over GAS: drop in a working Ability System Component, attribute set, character base, and data-driven ability set, and get a project that can grant abilities and attributes declaratively instead of rebuilding GAS plumbing from zero every time. It's the difference between treating GAS as something I configure once and reuse, versus something I re-derive per project.</p>
+  </div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 02</p>
+    <h2 class="cs-section-title">Implementation</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Four core classes make up the plugin's public API, plus the build-system work required to get a custom GAS plugin compiling cleanly in the first place.</p>
+    <ul class="cs-impl-list">
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">01 — GASO_ASC</span>
+          <div class="impl-text">
+            <strong>Custom Ability System Component</strong>
+            The plugin's own Ability System Component subclass — the shared entry point every character in a GASOline-powered project uses to grant, activate, and manage gameplay abilities and effects.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">02 — GASO_AttributeSet</span>
+          <div class="impl-text">
+            <strong>Base Attribute Set</strong>
+            A shared attribute set base that game-specific attribute sets build on — currently backing both the player and enemy attribute sets in The Resonance, keeping health, damage, and other stats on one consistent GAS-native path.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">03 — GASO_CharacterBase</span>
+          <div class="impl-text">
+            <strong>GAS-Wired Character Base Class</strong>
+            A character base class pre-wired to the plugin's Ability System Component and attribute set, so any character subclass gets a working GAS setup by default rather than needing it re-plumbed per actor.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">04 — GASO_AbilitySet</span>
+          <div class="impl-text">
+            <strong>Data-Driven Ability &amp; Attribute Granting</strong>
+            A <code>UPrimaryDataAsset</code>, modeled after Lyra's GameFeatureAction ability sets, that grants abilities and attribute sets declaratively from data instead of code. Each character type specifies its own attribute set through its own ability set asset, so adding a new character's kit is a data change, not a code change.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">05 — Build System &amp; Tooling</span>
+          <div class="impl-text">
+            <strong>Getting a Custom GAS Plugin to Compile Cleanly</strong>
+            Standing the plugin up meant working through real Unreal Build Tool friction — resolving source encoding issues, chasing down module dependency errors, and tracking an MSBuild environment-variable bug down to a PowerShell-based build workaround. Unglamorous, but the kind of problem that has to get solved before any gameplay code compiles at all.
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 03</p>
+    <h2 class="cs-section-title">Impact</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Every combat, health, and ability interaction in The Resonance runs through this plugin — it's the shared foundation the rest of the RPG's systems are built on top of, not a side experiment.</p>
+    <div class="cs-impact-grid">
+      <div class="impact-card"><p class="impact-num">4</p><p class="impact-label">Core Plugin Classes</p></div>
+      <div class="impact-card"><p class="impact-num">UE 5.7</p><p class="impact-label">Built From Scratch</p></div>
+      <div class="impact-card"><p class="impact-num">1</p><p class="impact-label">Shared Architecture, Every Combat System</p></div>
+      <div class="impact-card"><p class="impact-num">C++</p><p class="impact-label">Engine-Level Module</p></div>
+    </div>
+  </div>
+
+  <!-- MEDIA (pending capture) -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 04</p>
+    <h2 class="cs-section-title">Media Gallery</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">This is engine-layer code more than it's a visual showcase — best represented with source snippets and a class-diagram walkthrough. Slot for that below.</p>
+    <div class="media-pending-grid">
+      <div class="media-pending"><span class="mp-icon">⌥</span><span class="mp-label">Plugin Class Diagram</span></div>
+      <div class="media-pending"><span class="mp-icon">⌥</span><span class="mp-label">Ability Set Data Asset in Editor</span></div>
+    </div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 05</p>
+    <h2 class="cs-section-title">Takeaway</h2>
+    <div class="cs-section-rule"></div>
+    <div class="cs-takeaway">
+      <p>Building GASOline is a different discipline than writing gameplay code inside one game. Every class here is meant to be consumed by code I haven't written yet — a future character type, a future project — so the API surface, module boundaries, and naming have to hold up on their own, not just work for the one enemy or one ability I happened to be testing against.</p>
+      <p>I've deliberately deferred one refactor: the player and enemy attribute sets for The Resonance currently live inside the plugin itself, which means GASOline still references that game's own gameplay tags rather than being fully game-agnostic. Moving those classes out into a game-side module is the honest next step, and I'm keeping the current structure as a portfolio example of where the line between "reusable plugin" and "game-specific code" currently sits, rather than pretending that line is already clean.</p>
+      <p>The build-system debugging — encoding issues, module dependency errors, an MSBuild environment-variable bug — is the part of engine programming that doesn't show up in a gameplay reel but is exactly the kind of problem a tools or engine programmer is expected to solve without being told how.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="cs-sidebar">
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Tech Stack</p>
+    <span class="tech-tag">Unreal Engine 5.7+</span>
+    <span class="tech-tag">C++</span>
+    <span class="tech-tag">Unreal Build Tool</span>
+    <span class="tech-tag">Gameplay Ability System</span>
+    <span class="tech-tag">Primary Data Assets</span>
+    <span class="tech-tag">Plugin Architecture</span>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Powers</p>
+    <a class="sidebar-link" href="case-the-resonance.html">
+      <span class="link-icon">⌥</span> The Resonance — Elemental Action RPG
+    </a>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Role</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Sole engineer — plugin architecture, Ability System Component, attribute sets, and data-driven ability granting.</p>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Next Steps</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Evaluating a refactor to move The Resonance's game-specific attribute sets out of the plugin, so GASOline becomes fully game-agnostic and drop-in for future projects.</p>
+  </div>
+</aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="case-the-resonance.html">
+    ← <div><span>Previous</span><span class="pag-title">The Resonance</span></div>
+  </a>
+  <a class="cs-pag-btn" href="personal.html">
+    <div style="text-align:right;"><span>Back to</span><span class="pag-title">Personal Projects</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

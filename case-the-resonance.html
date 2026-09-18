@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Resonance — Case Study | Josh Brooks</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+  .nav-hamburger span { background: #E32132; }
+  .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
+
+  .cs-hero { position:relative; min-height:420px; display:flex; align-items:flex-end; overflow:hidden; background:
+      radial-gradient(ellipse 70% 60% at 75% 20%, rgba(34,211,238,0.14), transparent),
+      radial-gradient(ellipse 50% 50% at 15% 90%, rgba(132,0,5,0.22), transparent),
+      var(--bg-darker); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.5) 70%,var(--bg-dark) 100%); }
+  .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
+
+  .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
+  .cs-back:hover { color:var(--cyan); }
+  .cs-badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cs-chip { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.08); }
+  .cs-chip.red    { color:#E32132; border-color:rgba(227,33,50,0.4);   background:rgba(132,0,5,0.15); }
+  .cs-chip.purple { color:#a78bfa; border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.08); }
+  .cs-chip.green  { color:#4ade80; border-color:rgba(74,222,128,0.3);  background:rgba(74,222,128,0.08); }
+  .cs-title { font-family:var(--font-head); font-weight:700; font-size:clamp(32px,5vw,58px); color:var(--white); line-height:1.05; margin-bottom:12px; }
+  .cs-subtitle { font-size:15px; font-weight:300; color:rgba(255,255,255,0.6); max-width:640px; line-height:1.6; }
+
+  .cs-meta { background:var(--surface); border-bottom:1px solid var(--border); }
+  .cs-meta-inner { max-width:1200px; margin:0 auto; padding:0 40px; display:flex; gap:48px; flex-wrap:wrap; }
+  .cs-meta-item { padding:18px 0; flex-shrink:0; }
+  .cs-meta-label { font-family:var(--font-mono); font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .cs-meta-value { font-family:var(--font-mono); font-size:12px; color:var(--white); }
+  .cs-meta-value a { color:var(--cyan); text-decoration:none; transition:opacity 0.2s; }
+  .cs-meta-value a:hover { opacity:0.7; }
+
+  .cs-body { max-width:1200px; margin:0 auto; padding:64px 40px; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; }
+
+  .cs-section { margin-bottom:64px; }
+  .cs-section:last-child { margin-bottom:0; }
+  .cs-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#E32132; margin-bottom:10px; opacity:0.9; }
+  .cs-section-title { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--white); margin-bottom:20px; line-height:1.2; }
+  .cs-section-rule { width:32px; height:2px; background:linear-gradient(90deg,#E32132,transparent); margin-bottom:24px; }
+  .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
+  .cs-text:last-child { margin-bottom:0; }
+
+  /* IMPL CARDS (text-only — no video column) */
+  .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+  .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
+  .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .impl-main { padding:16px 18px; flex:1; min-width:0; }
+  .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
+  .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+
+  /* IMPACT */
+  .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
+  .impact-card:hover { border-color:rgba(34,211,238,0.4); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .impact-num { font-family:var(--font-head); font-weight:700; font-size:22px; color:var(--cyan); line-height:1; margin-bottom:6px; }
+  .impact-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); line-height:1.4; }
+
+  /* TAKEAWAY */
+  .cs-takeaway { background:var(--surface); border:1px solid var(--border); border-left:4px solid #E32132; border-radius:var(--radius); padding:28px 28px 28px 24px; margin-top:8px; }
+  .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
+  .cs-takeaway p:last-child { margin-bottom:0; }
+
+  /* MEDIA PLACEHOLDER */
+  .media-pending-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .media-pending { border-radius:var(--radius-sm); border:1px dashed var(--border); background:var(--surface2); min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px; text-align:center; }
+  .media-pending .mp-icon { font-size:20px; color:var(--muted); opacity:0.6; }
+  .media-pending .mp-label { font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+
+  /* SIDEBAR */
+  .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
+  .sidebar-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .sidebar-block-title { font-family:var(--font-mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--cyan); opacity:0.7; margin-bottom:14px; }
+  .tech-tag { display:inline-block; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; border:1px solid var(--border); color:var(--cyan); background:rgba(34,211,238,0.06); margin:0 4px 6px 0; }
+  .sidebar-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); color:var(--white); text-decoration:none; font-size:12px; font-weight:600; letter-spacing:1px; transition:background 0.2s,border-color 0.2s; margin-bottom:8px; }
+  .sidebar-link:last-child { margin-bottom:0; }
+  .sidebar-link:hover { background:rgba(34,211,238,0.08); border-color:rgba(34,211,238,0.4); }
+  .sidebar-link .link-icon { font-size:14px; color:var(--cyan); }
+
+  /* PAGINATION */
+  .cs-pagination { max-width:1200px; margin:0 auto; padding:32px 40px 64px; display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid var(--border); }
+  .cs-pag-btn { display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .cs-pag-btn:hover { color:var(--cyan); }
+  .cs-pag-btn .pag-title { font-family:var(--font-head); font-size:13px; font-weight:600; color:var(--white); letter-spacing:0; text-transform:none; display:block; margin-top:3px; }
+
+  @media (max-width:900px) {
+    .cs-body { grid-template-columns:1fr; gap:40px; padding:40px 20px; }
+    .cs-sidebar { position:static; }
+    .cs-hero-content { padding:32px 20px; }
+    .cs-meta-inner { padding:0 20px; gap:24px; }
+    .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
+    .cs-pagination { padding:24px 20px 48px; }
+    .media-pending-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-logo">
+    <img src="https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/users/c1eed976-c0aa-4ad0-b243-b94461a41cc9/design-previews/214d02a4-6cc4-48d9-95d4-596dc8450f7b/1761703744191-transparentThumbnail.png" alt="Josh Brooks Logo"/>
+    <span class="nav-logo-text">Josh Brooks</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="professional.html">Professional</a></li>
+    <li><a href="personal.html" class="active">Personal</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div class="cs-hero-content">
+    <a class="cs-back" href="personal.html">← Back to Personal Projects</a>
+    <div class="cs-badge-row">
+      <span class="cs-chip">Personal</span>
+      <span class="cs-chip purple">Original IP</span>
+      <span class="cs-chip">C++</span>
+      <span class="cs-chip">GAS</span>
+      <span class="cs-chip green">In Development</span>
+    </div>
+    <h1 class="cs-title">The Resonance</h1>
+    <p class="cs-subtitle">An elemental action RPG built solo in Unreal Engine 5 — my primary original IP and the vertical slice I'm building toward a gameplay programmer role at a Square Enix Western studio. Working names along the way: Yoruba Hearts, KHTry.</p>
+  </div>
+</div>
+
+<!-- META BAR -->
+<div class="cs-meta">
+  <div class="cs-meta-inner">
+    <div class="cs-meta-item"><p class="cs-meta-label">Timeline</p><p class="cs-meta-value">Ongoing</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Role</p><p class="cs-meta-value">Solo Developer</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Studio</p><p class="cs-meta-value">Independent / Personal IP</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Engine</p><p class="cs-meta-value">Unreal Engine 5.8</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Genre</p><p class="cs-meta-value">Elemental Action RPG</p></div>
+    <div class="cs-meta-item"><p class="cs-meta-label">Status</p><p class="cs-meta-value">Vertical Slice In Progress</p></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="cs-body">
+<main>
+
+  <!-- PURPOSE -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 01</p>
+    <h2 class="cs-section-title">Purpose</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">The Resonance is my primary long-term project and the one piece of original IP I'm building entirely on my own, outside of any studio work. It's the deliverable I'm treating as my vertical slice — the project meant to carry the most weight when I go after a junior/associate gameplay programmer role at a Square Enix Western studio.</p>
+    <p class="cs-text">The combat identity blends Kingdom Hearts II's combo finishers with Final Fantasy XV's multi-weapon switching (Sword / Gun / Lance), layered under a custom elemental system rooted in West and Central African (Yoruba) cosmology. The player belongs to an organization called The Resonance and carries the title Cipher — someone with the rare, hidden ability to hold every elemental affinity at once, in the same spirit as Clive and the Eikons in Final Fantasy XVI. Some Ciphers have defected to the enemy faction, The Severance; its corrupted-element enemies (Light Wrath, Dark Wrath) are the game's first combat targets.</p>
+    <p class="cs-text">Underneath the game, everything runs on Unreal's Gameplay Ability System — not off-the-shelf GAS boilerplate, but through a plugin I built from scratch called <a href="case-gasoline-plugin.html" style="color:var(--cyan);">GASOline</a>. Blueprint carries game-side logic; C++ owns the plugin layer, enemy AI, and the parts of combat that need to hold up as real architecture rather than one-off nodes.</p>
+  </div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 02</p>
+    <h2 class="cs-section-title">Implementation</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Six systems make up the current vertical slice — combat feel, GAS-driven health and damage, C++ enemy AI, UI, menu flow, and the elemental design layer underneath all of it.</p>
+    <ul class="cs-impl-list">
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">01 — Combo & Finisher System</span>
+          <div class="impl-text">
+            <strong>Hack-n-Slash Combo Architecture</strong>
+            A full sword combo/finisher system blending Kingdom Hearts II-style finishers with Final Fantasy XV's multi-weapon switching. Combos are contact-gated, and mixed-weapon strings yield mixed finishers. Reworked the feel after the combo string read as too gated — the finisher now fires the moment an enemy is present and the string completes, closer to a true hack-n-slash than a rhythm-locked combo.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">02 — Damage & Health Architecture</span>
+          <div class="impl-text">
+            <strong>GAS-Driven Damage, Segmented Health Bar</strong>
+            Refactored the damage pipeline onto GAS's SetByCaller pattern in place of hardcoded values, then bridged it to a modular segmented health bar — segments hold roughly 100 HP each, new segments appear as max health grows, and the main bar always represents the segment currently draining. Deprecated an older Blueprint health component so GAS is now the single source of truth for both player and enemy health.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">03 — Enemy AI in C++</span>
+          <div class="impl-text">
+            <strong>Perception, Behavior Trees & Per-Variant Attacks</strong>
+            Wrote the enemy AI controller in C++ — possession, Behavior Tree execution, and AI Perception with a sight config that writes the player to the blackboard on detection. Paired it with a custom C++ BT decorator (in-attack-range gating) and a BT attack task; each enemy has up to three attack variants — Light, Medium, Heavy — triggered through per-variant gameplay event tags. Patrol routes are settable per enemy directly in the viewport.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">04 — Player Vitals UI</span>
+          <div class="impl-text">
+            <strong>KH3-Style Radial Arc Built as a UMG Material</strong>
+            Built the player health readout as a UMG material — an angle mask via Arctangent2 and a ring mask via Length, driven by a fill-amount scalar on a dynamic material instance — designed to extend into a horizontal bar as max HP grows, with Kingdom Hearts III's health UI as the direct reference. Stamina and MP bars share the same player vitals widget.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">05 — Command Menu</span>
+          <div class="impl-text">
+            <strong>Kingdom Hearts Menu, Final Fantasy VII Rebirth Pacing</strong>
+            A Kingdom Hearts-style command menu (Attack / Magic / Items / Drive) with working top-level navigation and confirm — Attack routes directly into the combo manager's input handling. The target feel is Final Fantasy VII Rebirth: quick selections with time dilation while choosing rather than a hard pause, with Focus acting as a temporary super-state that boosts attributes.
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">06 — Zodia Elements System</span>
+          <div class="impl-text">
+            <strong>12-Sign Elemental Affinity, FFT-Style Compatibility</strong>
+            A dual-element zodiac system where a player's birth sign sets their elemental affinity — compatible elements hit harder, in the spirit of Final Fantasy Tactics' zodiac compatibility, without locking out the rest of the kit. The damage model stacks two axes — sign matchup and element-vs-target — modeled after Digimon Time Stranger's Vaccine/Virus/Data typing.
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- IMPACT -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 03</p>
+    <h2 class="cs-section-title">Impact</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">This is the project where I've had to own the full stack — design, Blueprint, and C++ — with nobody else to hand a system off to. It's also the reason the GASOline plugin exists as its own piece of engineering, not just a folder inside one game.</p>
+    <div class="cs-impact-grid">
+      <div class="impact-card"><p class="impact-num">A1–A3</p><p class="impact-label">Enemy AI Milestones Complete</p></div>
+      <div class="impact-card"><p class="impact-num">GAS</p><p class="impact-label">Full Combat &amp; Health Architecture</p></div>
+      <div class="impact-card"><p class="impact-num">12</p><p class="impact-label">Zodiac Elemental Signs Designed</p></div>
+      <div class="impact-card"><p class="impact-num">C++</p><p class="impact-label">Custom Enemy AI Controller</p></div>
+    </div>
+  </div>
+
+  <!-- MEDIA (pending capture) -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 04</p>
+    <h2 class="cs-section-title">Media Gallery</h2>
+    <div class="cs-section-rule"></div>
+    <p class="cs-text">Gameplay capture for the combo system, enemy AI, and player vitals UI is next — this section is wired up and ready for clips.</p>
+    <div class="media-pending-grid">
+      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Combo &amp; Finisher Clip</span></div>
+      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Enemy AI Clip</span></div>
+      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Player Vitals UI Clip</span></div>
+      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Command Menu Clip</span></div>
+    </div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="cs-section">
+    <p class="cs-section-label">// 05</p>
+    <h2 class="cs-section-title">Takeaway</h2>
+    <div class="cs-section-rule"></div>
+    <div class="cs-takeaway">
+      <p>Building The Resonance means owning the game and the tooling underneath it at the same time. GASOline exists because I wanted the combat architecture to be something I designed on purpose, not something that fell out of trial and error inside one project — which forces a different discipline than working inside someone else's systems: attribute sets, ability sets, and the AI controller all have to hold up as reusable, documented pieces, not just code that happens to work for one enemy or one combo string.</p>
+      <p>The AI work in particular pushed me further into C++ than any Blueprint-only project has. Writing the perception-to-blackboard pipeline, the BT decorator, and the per-variant attack task in C++ meant thinking in terms of engine-level contracts — behavior tree components, blackboard keys, perception configs — instead of node graphs. That's the direction I want to keep pushing, since it's closer to the day-to-day of the gameplay programmer roles I'm targeting.</p>
+      <p>The zodiac and Yoruba-rooted worldbuilding aren't just flavor — they're why the elemental system has real design constraints (twelve signs, corrected element houses, compatibility rules) instead of an arbitrary rock-paper-scissors wrapper. Getting the Final Fantasy Tactics-style compatibility math right, and stacking it against a second Digimon-style typing axis, has been its own systems design problem worth solving carefully before it goes into code.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="cs-sidebar">
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Tech Stack</p>
+    <span class="tech-tag">Unreal Engine 5.8</span>
+    <span class="tech-tag">C++</span>
+    <span class="tech-tag">Gameplay Ability System</span>
+    <span class="tech-tag">Behavior Trees</span>
+    <span class="tech-tag">AI Perception</span>
+    <span class="tech-tag">Blueprint</span>
+    <span class="tech-tag">Data Assets</span>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Companion Project</p>
+    <a class="sidebar-link" href="case-gasoline-plugin.html">
+      <span class="link-icon">⌥</span> GASOline — the GAS Plugin Powering This RPG
+    </a>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Role</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Solo developer — design, Blueprint gameplay logic, C++ AI and combat architecture, and the underlying GAS plugin.</p>
+  </div>
+  <div class="sidebar-block">
+    <p class="sidebar-block-title">Next Steps</p>
+    <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;">Finishing Medium/Heavy attack animations, building out the Magic / Items / Focus submenus, and continuing toward a playable vertical slice.</p>
+  </div>
+</aside>
+</div>
+
+<!-- PAGINATION -->
+<div class="cs-pagination">
+  <a class="cs-pag-btn" href="personal.html">
+    ← <div><span>Back to</span><span class="pag-title">Personal Projects</span></div>
+  </a>
+  <a class="cs-pag-btn" href="case-gasoline-plugin.html">
+    <div style="text-align:right;"><span>Next</span><span class="pag-title">GASOline Plugin</span></div> →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
+  <div class="footer-links">
+    <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
+    <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+</body>
+</html>
