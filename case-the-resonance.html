@@ -9,11 +9,13 @@
   .nav-hamburger span { background: #E32132; }
   .nav-links a:hover, .nav-links a.active { color: #E32132; border-bottom-color: #E32132; }
 
-  .cs-hero { position:relative; min-height:420px; display:flex; align-items:flex-end; overflow:hidden; background:
+  .cs-hero { position:relative; min-height:460px; display:flex; align-items:flex-end; overflow:hidden; background:
       radial-gradient(ellipse 70% 60% at 75% 20%, rgba(34,211,238,0.14), transparent),
       radial-gradient(ellipse 50% 50% at 15% 90%, rgba(132,0,5,0.22), transparent),
       var(--bg-darker); }
-  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.5) 70%,var(--bg-dark) 100%); }
+  .cs-hero-bg { position:absolute; inset:0; background-size:cover; background-position:center 25%; filter:brightness(0.4) saturate(0.95); transform:scale(1.04); transition:transform 8s ease; }
+  .cs-hero:hover .cs-hero-bg { transform:scale(1.0); }
+  .cs-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(35,39,47,0.55) 65%,var(--bg-dark) 100%); }
   .cs-hero-content { position:relative; z-index:2; padding:48px 40px; width:100%; max-width:1200px; margin:0 auto; }
 
   .cs-back { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); text-decoration:none; margin-bottom:24px; transition:color 0.2s; }
@@ -44,7 +46,7 @@
   .cs-text { font-size:14px; font-weight:300; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:16px; }
   .cs-text:last-child { margin-bottom:0; }
 
-  /* IMPL CARDS (text-only — no video column) */
+  /* IMPL CARDS (with optional static-image / video evidence column) */
   .cs-impl-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:8px; }
   .cs-impl-list li { display:flex; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--cyan); border-radius:var(--radius-sm); overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
   .cs-impl-list li:hover { border-left-color:#E32132; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
@@ -52,6 +54,17 @@
   .impl-icon { font-family:var(--font-mono); font-size:10px; color:var(--cyan); letter-spacing:1px; margin-bottom:6px; display:block; }
   .impl-text { font-size:13px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.6; }
   .impl-text strong { font-weight:600; color:var(--white); display:block; margin-bottom:4px; }
+
+  .impl-media { width:140px; flex-shrink:0; border-left:1px solid var(--border); overflow:hidden; position:relative; cursor:pointer; min-height:100px; }
+  .impl-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s,filter 0.3s; filter:brightness(0.65); display:block; }
+  .impl-media:hover img { transform:scale(1.06); filter:brightness(1); }
+  .impl-media-label { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan); padding:5px 8px; text-align:center; }
+
+  .impl-media-video { width:140px; flex-shrink:0; border-left:1px solid var(--border); background:var(--surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; position:relative; transition:background 0.2s; gap:6px; min-height:100px; }
+  .impl-media-video:hover { background:rgba(34,211,238,0.08); }
+  .impl-media-video .play-icon { font-size:26px; color:var(--cyan); opacity:0.8; transition:opacity 0.2s,transform 0.2s; }
+  .impl-media-video:hover .play-icon { opacity:1; transform:scale(1.1); }
+  .impl-media-video .vid-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 8px; }
 
   /* IMPACT */
   .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
@@ -65,11 +78,31 @@
   .cs-takeaway p { font-size:14px; font-weight:300; color:rgba(255,255,255,0.7); line-height:1.8; margin-bottom:14px; }
   .cs-takeaway p:last-child { margin-bottom:0; }
 
-  /* MEDIA PLACEHOLDER */
+  /* MEDIA PLACEHOLDER (still used for clips not captured yet) */
   .media-pending-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
   .media-pending { border-radius:var(--radius-sm); border:1px dashed var(--border); background:var(--surface2); min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px; text-align:center; }
   .media-pending .mp-icon { font-size:20px; color:var(--muted); opacity:0.6; }
   .media-pending .mp-label { font-family:var(--font-mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+
+  /* GALLERY */
+  .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .gallery-item { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface2); position:relative; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+  .gallery-item:hover { border-color:rgba(34,211,238,0.4); transform:translateY(-2px); }
+  .gallery-item.wide { grid-column:span 2; }
+  .gallery-item img { width:100%; display:block; object-fit:cover; min-height:120px; max-height:280px; }
+  .gallery-caption { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.85)); padding:24px 12px 10px; font-family:var(--font-mono); font-size:9px; letter-spacing:1px; color:var(--offwhite); opacity:0; transition:opacity 0.2s; }
+  .gallery-item:hover .gallery-caption { opacity:1; }
+  .gallery-video { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); position:relative; padding-top:56.25%; background:var(--surface2); }
+  .gallery-video.wide { grid-column:span 2; }
+  .gallery-video iframe, .gallery-video video { position:absolute; inset:0; width:100%; height:100%; border:none; object-fit:cover; }
+  .gallery-section-label { grid-column:span 2; font-family:var(--font-mono); font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding-top:8px; border-top:1px solid var(--border); margin-top:4px; }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:999; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:85vh; border-radius:var(--radius-sm); object-fit:contain; }
+  .lightbox-close { position:absolute; top:20px; right:24px; font-family:var(--font-mono); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); cursor:pointer; background:none; border:none; transition:color 0.2s; }
+  .lightbox-close:hover { color:var(--white); }
 
   /* SIDEBAR */
   .cs-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:20px; }
@@ -95,6 +128,9 @@
     .cs-impact-grid { grid-template-columns:repeat(2,1fr); }
     .cs-pagination { padding:24px 20px 48px; }
     .media-pending-grid { grid-template-columns:1fr; }
+    .gallery-grid { grid-template-columns:1fr; }
+    .gallery-item.wide, .gallery-video.wide, .gallery-section-label { grid-column:span 1; }
+    .impl-media, .impl-media-video { display:none; }
   }
 </style>
 </head>
@@ -119,6 +155,7 @@
 
 <!-- HERO -->
 <div class="cs-hero">
+  <div class="cs-hero-bg" style="background-image:url('media/the-resonance/hero.jpg');"></div>
   <div class="cs-hero-content">
     <a class="cs-back" href="personal.html">← Back to Personal Projects</a>
     <div class="cs-badge-row">
@@ -164,7 +201,7 @@
     <p class="cs-section-label">// 02</p>
     <h2 class="cs-section-title">Implementation</h2>
     <div class="cs-section-rule"></div>
-    <p class="cs-text">Five systems make up the current vertical slice — combat feel, GAS-driven health and damage, C++ enemy AI, UI, and menu flow.</p>
+    <p class="cs-text">Eight systems make up the current vertical slice — combat feel, GAS-driven health and damage, C++ enemy AI, UI, menu flow, and the dash, potion, and key systems that round out traversal and inventory.</p>
     <ul class="cs-impl-list">
 
       <li>
@@ -174,6 +211,10 @@
             <strong>Hack-n-Slash Combo Architecture</strong>
             A full sword combo/finisher system blending Kingdom Hearts II-style finishers with Final Fantasy XV's multi-weapon switching. Combos are contact-gated, and mixed-weapon strings yield mixed finishers. Reworked the feel after the combo string read as too gated — the finisher now fires the moment an enemy is present and the string completes, closer to a true hack-n-slash than a rhythm-locked combo.
           </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('GTtsTlE53To')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
         </div>
       </li>
 
@@ -195,6 +236,10 @@
             Wrote the enemy AI controller in C++ — possession, Behavior Tree execution, and AI Perception with a sight config that writes the player to the blackboard on detection. Paired it with a custom C++ BT decorator (in-attack-range gating) and a BT attack task; each enemy has up to three attack variants — Light, Medium, Heavy — triggered through per-variant gameplay event tags. Patrol routes are settable per enemy directly in the viewport.
           </div>
         </div>
+        <div class="impl-media" onclick="openLightbox('media/the-resonance/enemy-chase.jpg','Closing distance on the C++-driven enemy AI')">
+          <img src="media/the-resonance/enemy-chase.jpg" alt="Approaching enemy AI"/>
+          <span class="impl-media-label">View Capture</span>
+        </div>
       </li>
 
       <li>
@@ -205,6 +250,10 @@
             Built the player health readout as a UMG material — an angle mask via Arctangent2 and a ring mask via Length, driven by a fill-amount scalar on a dynamic material instance — designed to extend into a horizontal bar as max HP grows, with Kingdom Hearts III's health UI as the direct reference. Stamina and MP bars share the same player vitals widget.
           </div>
         </div>
+        <div class="impl-media" onclick="openLightbox('media/the-resonance/vitals-hud.jpg','Player vitals radial arc + stamina/MP bars, mid-fight')">
+          <img src="media/the-resonance/vitals-hud.jpg" alt="Player vitals HUD"/>
+          <span class="impl-media-label">View Capture</span>
+        </div>
       </li>
 
       <li>
@@ -214,6 +263,52 @@
             <strong>Kingdom Hearts Menu, Final Fantasy VII Rebirth Pacing</strong>
             A Kingdom Hearts-style command menu (Attack / Magic / Items / Drive) with working top-level navigation and confirm — Attack routes directly into the combo manager's input handling. The target feel is Final Fantasy VII Rebirth: quick selections with time dilation while choosing rather than a hard pause, with Focus acting as a temporary super-state that boosts attributes.
           </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/the-resonance/command-menu.jpg','Command menu — Attack / Magic / Items / Focus')">
+          <img src="media/the-resonance/command-menu.jpg" alt="Command menu"/>
+          <span class="impl-media-label">View Capture</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">06 — Dash &amp; Stamina</span>
+          <div class="impl-text">
+            <strong>Stamina-Gated Traversal</strong>
+            A dash tied into the same attribute set that drives health — confirmed in-engine via an on-screen "Is Dash Activated" debug flag firing as the stamina bar in the vitals HUD depletes on activation. Traversal now costs a resource instead of being a free, unlimited dodge.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('nFQrrKt27sA')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">07 — Item-Based Healing</span>
+          <div class="impl-text">
+            <strong>Stackable Potions Through the GAS Pipeline</strong>
+            High Health Potions (Uncommon, +20 HP) sit in the same inventory grid as keys and equipment — picked up in the world, stacked, and consumed to restore health through GAS. Built and tested directly in the KHTry project alongside the gameplay effect and item assets driving it (GE_Status_HealHeal, GE_YH_Health, Item_HighPotion).
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('U3IcbhrRoGY')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li>
+        <div class="impl-main">
+          <span class="impl-icon">08 — Keys &amp; Locked Doors</span>
+          <div class="impl-text">
+            <strong>Consumable-Item World Gating</strong>
+            A Key item (Rare, "OpenLockedDoors," 3 uses) unlocks gated doors in the world instead of a simple proximity trigger — doors carry separate open/close and lock/unlock interaction prompts, and each use decrements the key's remaining charge in the inventory panel. Traversal is gated behind item collection, not just distance.
+          </div>
+        </div>
+        <div class="impl-media-video" onclick="openVideoModal('XCHfXPDXIJI')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
         </div>
       </li>
 
@@ -234,17 +329,54 @@
     </div>
   </div>
 
-  <!-- MEDIA (pending capture) -->
+  <!-- MEDIA -->
   <div class="cs-section">
     <p class="cs-section-label">// 04</p>
     <h2 class="cs-section-title">Media Gallery</h2>
     <div class="cs-section-rule"></div>
-    <p class="cs-text">Gameplay capture for the combo system, enemy AI, and player vitals UI is next — this section is wired up and ready for clips.</p>
-    <div class="media-pending-grid">
-      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Combo &amp; Finisher Clip</span></div>
-      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Enemy AI Clip</span></div>
-      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Player Vitals UI Clip</span></div>
-      <div class="media-pending"><span class="mp-icon">▶</span><span class="mp-label">Command Menu Clip</span></div>
+    <p class="cs-text">First real capture from the vertical slice — combo/finisher combat, the C++ enemy AI, the command menu, the KH3-style vitals HUD, dash/stamina, item-based healing, and key-gated doors — plus a dedicated clip on the elemental Fragment system.</p>
+    <div class="gallery-grid">
+
+      <p class="gallery-section-label">Gameplay Capture</p>
+
+      <div class="gallery-item wide" onclick="openLightbox('media/the-resonance/hero.jpg','Sword combo — vertical slice test level')">
+        <img src="media/the-resonance/hero.jpg" alt="Sword combo"/>
+        <span class="gallery-caption">Sword combo, vertical slice test level</span>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('media/the-resonance/rooftop-wide.jpg','Closing distance on an enemy across the test level')">
+        <img src="media/the-resonance/rooftop-wide.jpg" alt="Chasing an enemy"/>
+        <span class="gallery-caption">Closing distance on an enemy</span>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('media/the-resonance/inventory-item.jpg','Item pickup — FantasySword (Legendary), earth element')">
+        <img src="media/the-resonance/inventory-item.jpg" alt="Inventory item detail"/>
+        <span class="gallery-caption">Item pickup &amp; inventory — FantasySword</span>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('media/the-resonance/key-detail.jpg','Key item — Rare, OpenLockedDoors, 3 uses')">
+        <img src="media/the-resonance/key-detail.jpg" alt="Key item detail"/>
+        <span class="gallery-caption">Key item — Rare, 3 uses</span>
+      </div>
+
+      <p class="gallery-section-label">Video Clips</p>
+
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/Aj-qt6Xsw6M" title="The Resonance — Fragment System &amp; Enemy Combat" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/GTtsTlE53To" title="The Resonance — Combo &amp; Finisher Combat" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/nFQrrKt27sA" title="The Resonance — Dash &amp; Stamina System" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/U3IcbhrRoGY" title="The Resonance — Health System &amp; Potions" allowfullscreen></iframe>
+      </div>
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/XCHfXPDXIJI" title="The Resonance — Keys &amp; Locked Doors" allowfullscreen></iframe>
+      </div>
+
     </div>
   </div>
 
@@ -302,7 +434,7 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
+  <p class="footer-copy">© 2023–2026 Josh Brooks — Game Developer</p>
   <div class="footer-links">
     <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
@@ -310,9 +442,44 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<div class="lightbox" id="videoModal" onclick="closeVideoModal()">
+  <button class="lightbox-close" onclick="closeVideoModal()">✕ Close</button>
+  <div style="width:min(900px,90vw);aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;" onclick="event.stopPropagation()">
+    <iframe id="videoFrame" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
 <script>
   document.getElementById('hamburger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
+  });
+  function openLightbox(src, alt) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxImg').alt = alt || '';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function openVideoModal(videoId) {
+    document.getElementById('videoFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+    document.getElementById('videoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideoModal() {
+    document.getElementById('videoFrame').src = '';
+    document.getElementById('videoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLightbox(); closeVideoModal(); }
   });
 </script>
 </body>
