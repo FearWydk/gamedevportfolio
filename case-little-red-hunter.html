@@ -306,9 +306,9 @@
             A lunar-cycle system from the studio's Technical Design Doc: a 13-entry E_MoonPhase enum (Full Moon, Blood Moon, Blue Moon, Hunter's Moon, Eclipse, and more) drives an ApplyPhase() function that looks up the matching row in a DT_MoonEffects DataTable and broadcasts an On Moon Phase Changed event dispatcher, so any system — UI, AI, the Stat Component below — can react without polling. Each row carries its own player/enemy stat modifiers and enemy behavior tags via a shared struct. Currently phase-testing with a random roll on Begin Play; wiring the real trigger (room-cleared count or boss room entry) is next.
           </div>
         </div>
-        <div class="impl-media" onclick="openLightbox('media/little-red-hunter/ApplyPhase Blueprint.png','ApplyPhase() — looks up the DT_MoonEffects row and broadcasts On Moon Phase Changed')">
-          <img src="media/little-red-hunter/ApplyPhase Blueprint.png" alt="ApplyPhase Blueprint"/>
-          <span class="impl-media-label">ApplyPhase()</span>
+        <div class="impl-media-video" onclick="openVideoModal('lCYq_aEErFQ')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
         </div>
       </li>
 
@@ -362,6 +362,9 @@
 
       <p class="gallery-section-label">Moon Phase Mechanic — System Reference</p>
 
+      <div class="gallery-video wide">
+        <iframe src="https://www.youtube.com/embed/lCYq_aEErFQ" title="Moon Phase Stat System — live ApplyPhase() test" allowfullscreen></iframe>
+      </div>
       <div class="gallery-item" onclick="openLightbox('media/little-red-hunter/E_MoonPhase Enum.png','E_MoonPhase — the 13-entry lunar phase enum')">
         <img src="media/little-red-hunter/E_MoonPhase Enum.png" alt="E_MoonPhase enum"/>
         <span class="gallery-caption">E_MoonPhase — 13 phases</span>
