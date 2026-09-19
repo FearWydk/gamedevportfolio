@@ -58,6 +58,11 @@
   .impl-media-video:hover .play-icon { opacity:1; transform:scale(1.1); }
   .impl-media-video .vid-label { font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); text-align:center; padding:0 8px; }
 
+  .impl-media { width:140px; flex-shrink:0; border-left:1px solid var(--border); overflow:hidden; position:relative; cursor:pointer; min-height:100px; }
+  .impl-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s,filter 0.3s; filter:brightness(0.65); display:block; }
+  .impl-media:hover img { transform:scale(1.06); filter:brightness(1); }
+  .impl-media-label { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan); padding:5px 8px; text-align:center; }
+
   /* IMPACT */
   .cs-impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
   .impact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 12px; text-align:center; transition:border-color 0.3s,box-shadow 0.3s; }
@@ -72,6 +77,12 @@
 
   /* GALLERY */
   .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .gallery-item { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface2); position:relative; cursor:pointer; transition:border-color 0.2s,transform 0.2s; }
+  .gallery-item:hover { border-color:rgba(34,211,238,0.4); transform:translateY(-2px); }
+  .gallery-item.wide { grid-column:span 2; }
+  .gallery-item img { width:100%; display:block; object-fit:cover; min-height:120px; max-height:260px; }
+  .gallery-caption { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.72); padding:8px 12px; font-family:var(--font-mono); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.7); opacity:0; transition:opacity 0.2s; }
+  .gallery-item:hover .gallery-caption { opacity:1; }
   .gallery-video { border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); position:relative; padding-top:56.25%; background:var(--surface2); }
   .gallery-video.wide { grid-column:span 2; }
   .gallery-video iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
@@ -115,7 +126,7 @@
     .cs-pagination { padding:24px 20px 48px; }
     .gallery-grid { grid-template-columns:1fr; }
     .gallery-item.wide,.gallery-video.wide,.gallery-section-label { grid-column:span 1; }
-    .impl-media-video { display:none; }
+    .impl-media-video,.impl-media { display:none; }
   }
 </style>
 </head>
@@ -281,6 +292,24 @@
             Substantially rebuilt an inherited Blueprint quest system: DataTable-driven quest identity, a modular BPC_QuestManager, a rebuilt WBP_Dialogue widget with a typewriter text effect, and a reworked NPC interaction loop — so designers can add or edit quests through data rather than new Blueprint graphs.
           </div>
         </div>
+        <div class="impl-media-video" onclick="openVideoModal('rC7VHt7Xa0Q')">
+          <span class="play-icon">▶</span>
+          <span class="vid-label">Watch Clip</span>
+        </div>
+      </li>
+
+      <li id="moon-phase">
+        <div class="impl-main">
+          <span class="impl-icon">08 — Moon Phase Mechanic</span>
+          <div class="impl-text">
+            <strong>13-Phase Lunar Modifier, Data-Driven</strong>
+            A lunar-cycle system from the studio's Technical Design Doc: a 13-entry E_MoonPhase enum (Full Moon, Blood Moon, Blue Moon, Hunter's Moon, Eclipse, and more) drives an ApplyPhase() function that looks up the matching row in a DT_MoonEffects DataTable and broadcasts an On Moon Phase Changed event dispatcher, so any system — UI, AI, the Stat Component below — can react without polling. Each row carries its own player/enemy stat modifiers and enemy behavior tags via a shared struct. Currently phase-testing with a random roll on Begin Play; wiring the real trigger (room-cleared count or boss room entry) is next.
+          </div>
+        </div>
+        <div class="impl-media" onclick="openLightbox('media/little-red-hunter/ApplyPhase Blueprint.png','ApplyPhase() — looks up the DT_MoonEffects row and broadcasts On Moon Phase Changed')">
+          <img src="media/little-red-hunter/ApplyPhase Blueprint.png" alt="ApplyPhase Blueprint"/>
+          <span class="impl-media-label">ApplyPhase()</span>
+        </div>
       </li>
 
     </ul>
@@ -293,7 +322,7 @@
     <div class="cs-section-rule"></div>
     <p class="cs-text">As Lead Programmer, every core system in Little Red Hunter runs through my architecture. The modular component approach means the team can extend any system without breaking existing functionality — a direct application of lessons learned from Shattered Melodies.</p>
     <div class="cs-impact-grid">
-      <div class="impact-card"><p class="impact-num">7</p><p class="impact-label">Core Systems Built</p></div>
+      <div class="impact-card"><p class="impact-num">8</p><p class="impact-label">Core Systems Built</p></div>
       <div class="impact-card"><p class="impact-num">22GB</p><p class="impact-label">Shared Codebase</p></div>
       <div class="impact-card"><p class="impact-num">Lead</p><p class="impact-label">Programmer Role</p></div>
       <div class="impact-card"><p class="impact-num">UE5</p><p class="impact-label">Blueprints + GAS Roadmap</p></div>
@@ -327,6 +356,20 @@
       <div class="gallery-video">
         <iframe src="https://www.youtube.com/embed/3enIPtaj6gQ" title="Opening Cutscene" allowfullscreen></iframe>
       </div>
+      <div class="gallery-video">
+        <iframe src="https://www.youtube.com/embed/rC7VHt7Xa0Q" title="Quest-Gated Dialogue System" allowfullscreen></iframe>
+      </div>
+
+      <p class="gallery-section-label">Moon Phase Mechanic — System Reference</p>
+
+      <div class="gallery-item" onclick="openLightbox('media/little-red-hunter/E_MoonPhase Enum.png','E_MoonPhase — the 13-entry lunar phase enum')">
+        <img src="media/little-red-hunter/E_MoonPhase Enum.png" alt="E_MoonPhase enum"/>
+        <span class="gallery-caption">E_MoonPhase — 13 phases</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('media/little-red-hunter/Moon Phase BeginPlay.png','Begin Play — random phase roll for testing, ahead of the real room-cleared/boss-room trigger')">
+        <img src="media/little-red-hunter/Moon Phase BeginPlay.png" alt="Moon Phase Begin Play testing hook"/>
+        <span class="gallery-caption">Begin Play — test trigger</span>
+      </div>
 
     </div>
   </div>
@@ -357,6 +400,7 @@
     <span class="tech-tag">Sequencer</span>
     <span class="tech-tag">Git LFS</span>
     <span class="tech-tag">DataTables</span>
+    <span class="tech-tag">Event Dispatchers</span>
   </div>
   <div class="sidebar-block">
     <p class="sidebar-block-title">Studio</p>
@@ -387,13 +431,19 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <p class="footer-copy">© 2026 Josh Brooks — Game Developer</p>
+  <p class="footer-copy">© 2023–2026 Josh Brooks — Game Developer</p>
   <div class="footer-links">
     <a href="http://www.linkedin.com/in/veryambitious" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://fear-wydk.itch.io" target="_blank" rel="noopener">itch.io</a>
     <a href="https://github.com/FearWydk" target="_blank" rel="noopener">GitHub</a>
   </div>
 </footer>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
 
 <!-- VIDEO MODAL -->
 <div class="lightbox" id="videoModal" onclick="closeVideoModal()">
@@ -407,6 +457,16 @@
   document.getElementById('hamburger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });
+  function openLightbox(src, alt) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxImg').alt = alt || '';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
   function openVideoModal(videoId) {
     document.getElementById('videoFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
     document.getElementById('videoModal').classList.add('open');
@@ -418,7 +478,7 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeVideoModal();
+    if (e.key === 'Escape') { closeVideoModal(); closeLightbox(); }
   });
 </script>
 </body>
